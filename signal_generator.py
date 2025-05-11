@@ -3,9 +3,16 @@ import pandas_ta as ta
 import datetime
 
 def get_signal(symbol="EURUSD=X"):
-    # Check if it's a weekend (Saturday or Sunday)
-    today = datetime.datetime.now()
-    if today.weekday() >= 5:  # Saturday or Sunday
+    # Check if the symbol is for Bitcoin or Ethereum
+    if symbol == "BTCUSD=X" or symbol == "ETHUSD=X":
+        weekend_check = False  # Skip the weekend check for BTC and ETH
+    else:
+        # Otherwise, check if it's the weekend
+        today = datetime.datetime.now()
+        weekend_check = today.weekday() >= 5  # Saturday or Sunday
+
+    # If it's a weekend and not Bitcoin or Ethereum, return "No data - Weekend"
+    if weekend_check:
         return {"pair": symbol, "signal": "No data - Weekend", "rsi": None, "macd": None}
 
     try:
