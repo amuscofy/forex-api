@@ -1,5 +1,6 @@
 fastapi
 uvicorn
-pandas
+pandas==1.5.3
+numpy==1.23.5
 yfinance
-pandas-ta
+pandas-ta==0.3.14b0
