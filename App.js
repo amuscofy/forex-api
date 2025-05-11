@@ -7,7 +7,7 @@ export default function App() {
   const [signals, setSignals] = useState([]);
 
   useEffect(() => {
-    fetch('http://forex-api-m3vi.onrender.com/signals')  // replace with your deployed FastAPI endpoint
+    fetch('https://forex-api-m3vi.onrender.com/signals')  // replace with your deployed FastAPI endpoint
       .then(res => res.json())
       .then(setSignals)
       .catch(err => console.error(err));
