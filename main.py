@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from signal_generator import get_signal
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,16 +17,19 @@ app.add_middleware(
 def daily_signals():
     pairs = ["EURUSD=X", "GBPUSD=X", "USDJPY=X"]
     signals = []
+    
+    # Loop through each pair and get the signal, catching any exceptions
     for pair in pairs:
         try:
             # Try to get the signal for each pair
             signal_data = get_signal(pair)
             signals.append(signal_data)
         except Exception as e:
-            # If there's an error (e.g., network issue or Yahoo Finance failure), handle it gracefully
+            # If an error occurs, append an error message
             signals.append({
                 "pair": pair,
                 "signal": "Error",
-                "message": str(e)  # Provide the error message in the response
+                "message": str(e)
             })
+    
     return signals
