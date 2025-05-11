@@ -1,16 +1,25 @@
-// App.js
-
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
 
 export default function App() {
   const [signals, setSignals] = useState([]);
+  const [error, setError] = useState(null);  // State to hold any errors
 
   useEffect(() => {
-    fetch('https://forex-api-m3vi.onrender.com/signals')  // replace with your deployed FastAPI endpoint
+    fetch('https://forex-api-m3vi.onrender.com/signals')
       .then(res => res.json())
-      .then(setSignals)
-      .catch(err => console.error(err));
+      .then(data => {
+        // Check if there's an error message in the response
+        if (data && data.some(item => item.signal === "Error")) {
+          setError("There was an issue fetching the signals. Please try again later.");
+        } else {
+          setSignals(data);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        setError("Failed to fetch data. Please check your internet connection.");
+      });
   }, []);
 
   const getColor = (signal) => {
@@ -31,11 +40,15 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>📈 Forex Signals</Text>
-      <FlatList
-        data={signals}
-        keyExtractor={item => item.pair}
-        renderItem={renderItem}
-      />
+      {error ? (
+        <Text style={styles.error}>{error}</Text>  // Show the error message if it exists
+      ) : (
+        <FlatList
+          data={signals}
+          keyExtractor={item => item.pair}
+          renderItem={renderItem}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -47,4 +60,5 @@ const styles = StyleSheet.create({
   pair: { fontSize: 20, fontWeight: 'bold' },
   info: { marginTop: 5, color: '#444' },
   timestamp: { fontSize: 12, color: '#aaa', marginTop: 5 },
+  error: { color: 'red', textAlign: 'center', marginTop: 20 }
 });
