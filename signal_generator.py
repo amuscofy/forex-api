@@ -3,20 +3,20 @@ import pandas_ta as ta
 import datetime
 
 def get_signal(symbol="EURUSD=X"):
-    # Check if the symbol is for Bitcoin or Ethereum
+    # Check if the symbol is for Bitcoin (BTCUSD=X) or Ethereum (ETHUSD=X)
     if symbol == "BTCUSD=X" or symbol == "ETHUSD=X":
         weekend_check = False  # Skip the weekend check for BTC and ETH
     else:
-        # Otherwise, check if it's the weekend
+        # Otherwise, check if it's the weekend (for forex pairs)
         today = datetime.datetime.now()
         weekend_check = today.weekday() >= 5  # Saturday or Sunday
 
     # If it's a weekend and not Bitcoin or Ethereum, return "No data - Weekend"
-    if weekend_check:
+    if weekend_check and not (symbol == "BTCUSD=X" or symbol == "ETHUSD=X"):
         return {"pair": symbol, "signal": "No data - Weekend", "rsi": None, "macd": None}
 
     try:
-        # Fetch data from Yahoo Finance
+        # Fetch data from Yahoo Finance for both crypto and forex pairs
         df = yf.download(symbol, period="30d", interval="1h")
         
         # Check if the data is empty or has insufficient data
