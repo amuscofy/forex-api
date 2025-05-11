@@ -15,7 +15,8 @@ app.add_middleware(
 
 @app.get("/signals")
 def daily_signals():
-    pairs = ["EURUSD=X", "GBPUSD=X", "USDJPY=X"]
+    # Add BTCUSD=X and ETHUSD=X to the list of pairs
+    pairs = ["EURUSD=X", "GBPUSD=X", "USDJPY=X", "BTCUSD=X", "ETHUSD=X"]
     signals = []
     
     # Loop through each pair and get the signal, catching any exceptions
