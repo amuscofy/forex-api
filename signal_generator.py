@@ -17,10 +17,10 @@ def get_signal(symbol="EURUSD=X"):
 
     try:
         # Fetch data from Yahoo Finance for both crypto and forex pairs
-        df = yf.download(symbol, period="30d", interval="1h")
+        df = yf.download(symbol, period="7d", interval="1d")  # Use 7 days period and 1-day interval for crypto
         
         # Check if the data is empty or has insufficient data
-        if df.empty or len(df) < 30:
+        if df.empty or len(df) < 7:
             return {"pair": symbol, "signal": "No data", "rsi": None, "macd": None}
 
         # Calculate the RSI and MACD indicators
@@ -48,4 +48,4 @@ def get_signal(symbol="EURUSD=X"):
 
     except Exception as e:
         # Return an error message in case of failure
-        return {"pair": symbol, "signal": "Error", "message": str(e)}
+        return {"pair": symbol, "signal": "Error", "message": f"Error fetching data: {str(e)}"}
